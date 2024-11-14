@@ -1,0 +1,16 @@
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"  # Expose MongoDB on port 27017
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "3001:8081"  # Map host port 3001 to container port 8081
+    depends_on:
+      - mongo
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=pass
+      - ME_CONFIG_MONGODB_SERVER=mongo
