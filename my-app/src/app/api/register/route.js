@@ -1,5 +1,4 @@
 import { connectToDatabase } from "@/lib/mongoDB";
-import bcrypt from "bcrypt";
 
 export async function POST(req) {
     try {
@@ -10,7 +9,13 @@ export async function POST(req) {
             return new Response("All fields are required");
         }
 
-        // Connect to the database using your `mongoDB.js`
+        // Email format validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return new Response("Invalid email format");
+        }
+
+        // Connect to the database
         const db = await connectToDatabase();
 
         // Check if the user already exists
@@ -19,15 +24,12 @@ export async function POST(req) {
             return new Response("User already exists");
         }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Insert the new user
+        // Insert the new user with plain text password
         await db.collection("users").insertOne({
             name,
             email,
-            password: hashedPassword,
-            createdAt: new Date(),
+            password, // Store the plain text password
+            createdAt: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
         });
 
         return new Response("User registered successfully");
