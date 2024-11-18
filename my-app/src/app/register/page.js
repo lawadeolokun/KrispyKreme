@@ -1,26 +1,24 @@
 "use client";
 
 import React, { useState } from "react";
-import { TextField, Button, Container, Typography, Box } from "@mui/material";
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
+        accountType: "customer", // Default account type
     });
 
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
+    const [responseMessage, setResponseMessage] = useState("");
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError("");
-        setSuccess("");
 
         try {
             const response = await fetch("/api/register", {
@@ -31,69 +29,66 @@ export default function RegisterPage() {
                 body: JSON.stringify(formData),
             });
 
-            if (!response.ok) {
-                const message = await response.text();
-                throw new Error(message);
-            }
-
-            setSuccess("User registered successfully!");
-            setFormData({ name: "", email: "", password: "" });
-        } catch (err) {
-            setError(err.message || "An error occurred");
+            const text = await response.text();
+            setResponseMessage(text);
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            setResponseMessage("An error occurred while registering.");
         }
     };
 
     return (
-        <Container maxWidth="sm">
-            <Box my={4}>
-                <Typography variant="h4" gutterBottom>
-                    Register
-                </Typography>
-                {error && (
-                    <Typography color="error" gutterBottom>
-                        {error}
-                    </Typography>
-                )}
-                {success && (
-                    <Typography color="primary" gutterBottom>
-                        {success}
-                    </Typography>
-                )}
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Name"
+        <div>
+            <h1>Register</h1>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="name">Name:</label>
+                    <input
+                        type="text"
+                        id="name"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        fullWidth
-                        margin="normal"
                         required
                     />
-                    <TextField
-                        label="Email"
-                        name="email"
+                </div>
+                <div>
+                    <label htmlFor="email">Email:</label>
+                    <input
                         type="email"
+                        id="email"
+                        name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        fullWidth
-                        margin="normal"
                         required
                     />
-                    <TextField
-                        label="Password"
-                        name="password"
+                </div>
+                <div>
+                    <label htmlFor="password">Password:</label>
+                    <input
                         type="password"
+                        id="password"
+                        name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        fullWidth
-                        margin="normal"
                         required
                     />
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
-                        Register
-                    </Button>
-                </form>
-            </Box>
-        </Container>
+                </div>
+                <div>
+                    <label htmlFor="accountType">Account Type:</label>
+                    <select
+                        id="accountType"
+                        name="accountType"
+                        value={formData.accountType}
+                        onChange={handleChange}
+                    >
+                        <option value="customer">Customer</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            {responseMessage && <p>{responseMessage}</p>}
+        </div>
     );
 }

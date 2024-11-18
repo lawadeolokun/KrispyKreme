@@ -1,27 +1,42 @@
-import { connectToDatabase } from "@/lib/mongoDB"; // Adjust the path based on your folder structure
+import { connectToDatabase } from "@/lib/mongoDB";
 
 export async function POST(req) {
-    const { email, password } = await req.json();
-
-    if (!email || !password) {
-        return new Response("Email and password are required");
-    }
-
     try {
-        const { db } = await connectToDatabase();
+        // Parse the incoming request
+        const { email, password } = await req.json();
+        console.log("Received email:", email);
+        console.log("Received password:", password);
+
+        if (!email || !password) {
+            console.log("Missing email or password");
+            return new Response("Email and password are required");
+        }
+
+        // Connect to the database
+        const db = await connectToDatabase();
+        console.log("Connected to database:", db.databaseName);
+
+        // Check if the `users` collection exists
+        const users = await db.collection("users").find().toArray();
+        console.log("Users in the collection:", users);
 
         // Check if the user exists
         const user = await db.collection("users").findOne({ email });
+        console.log("Found user:", user);
+
         if (!user) {
+            console.log("User not found for email:", email);
             return new Response("Invalid email or password");
         }
 
-        // Directly compare the plain text password
-        if (password !== user.password) {
+        // Compare passwords (assuming plain text for now)
+        if (user.password !== password) {
+            console.log("Password does not match for email:", email);
             return new Response("Invalid email or password");
         }
 
-        // Return user type for redirection
+        // Success
+        console.log("Login successful for user:", email);
         return new Response(JSON.stringify({ accountType: user.accountType }), {
             headers: { "Content-Type": "application/json" },
         });

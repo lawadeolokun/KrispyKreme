@@ -2,39 +2,45 @@ import { connectToDatabase } from "@/lib/mongoDB";
 
 export async function POST(req) {
     try {
-        const { name, email, password } = await req.json();
+        console.log("Starting registration process...");
+
+        const { name, email, password, accountType } = await req.json();
 
         // Validate input
-        if (!name || !email || !password) {
+        if (!name || !email || !password || !accountType) {
+            console.log("Missing fields" , { name, email, password, accountType });
             return new Response("All fields are required");
         }
 
-        // Email format validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return new Response("Invalid email format");
-        }
-
-        // Connect to the database
+        console.log("Connecting to database...");
         const db = await connectToDatabase();
+        console.log("Database connected");
 
-        // Check if the user already exists
-        const existingUser = await db.collection("users").findOne({ email });
+        const usersCollection = db.collection("users");
+
+        console.log("Checking if user exists...");
+        const existingUser = await usersCollection.findOne({ email });
+        console.log("Existing user check complete:", existingUser);
+
         if (existingUser) {
+            console.log("User already exists");
             return new Response("User already exists");
         }
 
-        // Insert the new user with plain text password
-        await db.collection("users").insertOne({
+        console.log("Inserting new user...");
+        const result = await usersCollection.insertOne({
             name,
             email,
-            password, // Store the plain text password
-            createdAt: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
+            password, // Store plain password for simplicity; consider hashing in production.
+            accountType,
+            createdAt: new Date(),
         });
+
+        console.log("Insert result:", result);
 
         return new Response("User registered successfully");
     } catch (error) {
         console.error("Registration error:", error);
-        return new Response("Server error occurred");
+        return new Response("An error occurred while registering the user");
     }
 }
