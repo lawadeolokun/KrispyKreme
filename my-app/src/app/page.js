@@ -1,95 +1,66 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+import React from "react";
+import { AppBar, Toolbar, Typography, Button, Container, Box } from "@mui/material";
+import { useRouter } from "next/navigation";
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+export default function HomePage() {
+    const router = useRouter();
+
+    return (
+        <Box>
+            <AppBar position="static" style={{ backgroundColor: "#3f51b5" }}>
+                <Toolbar>
+                    <Typography variant="h6" style={{ flexGrow: 1, cursor: "pointer" }} onClick={() => router.push("/")}>
+                        Krispy Kreme
+                    </Typography>
+                    <Button color="inherit" onClick={() => router.push("/register")}>
+                        Register
+                    </Button>
+                    <Button color="inherit" onClick={() => router.push("/login")}>
+                        Login
+                    </Button>
+                    <Button color="inherit" onClick={() => router.push("/customer")}>
+                        Customer
+                    </Button>
+                    <Button color="inherit" onClick={() => router.push("/manager")}>
+                        Manager
+                    </Button>
+                    <Button color="inherit" onClick={() => router.push("/view_cart")}>
+                        View Cart
+                    </Button>
+                    <Button color="inherit" onClick={() => router.push("/checkout")}>
+                        Checkout
+                    </Button>
+                </Toolbar>
+            </AppBar>
+
+            
+            <Container maxWidth="md" style={{ marginTop: "20px", textAlign: "center" }}>
+                <Typography variant="h4" component="h1" gutterBottom>
+                    Welcome to Krispy Kreme
+                </Typography>
+                <Typography variant="body1" style={{ marginBottom: "20px" }}>
+                    Enjoy the best donuts in town! Use the links above to navigate to the respective pages.
+                </Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ margin: "10px" }}
+                    onClick={() => router.push("/register")}
+                >
+                    Register Now
+                </Button>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    style={{ margin: "10px" }}
+                    onClick={() => router.push("/login")}
+                >
+                    Login
+                </Button>
+            </Container>
+        </Box>
+    );
 }
+
