@@ -17,11 +17,12 @@ body {
 }
 
 body {
-  color: var(--foreground);
+  color: red;
   background: var(--background);
   font-family: 'GeistVF', Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: lightblue;
 }
 
 * {
@@ -47,4 +48,26 @@ a {
   font-weight: normal;
   font-style: normal;
 }
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  background-color: #d4f5d4; /* Light green background */
+  border: 1px solid #4caf50; /* Green border */
+  color: #171717; /* Text color */
+  padding: 0.5rem; /* Padding inside the input */
+  font-size: 1rem; /* Font size for the input text */
+  border-radius: 5px; /* Rounded corners */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  outline: none; /* Remove the default focus outline */
+  border-color: #2e7d32; /* Darker green border on focus */
+  box-shadow: 0 0 5px #4caf50; /* Subtle green glow */
+}
+
 
