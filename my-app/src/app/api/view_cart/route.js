@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import { connectToDatabase } from "@/lib/mongoDB";
 
 export async function GET() {

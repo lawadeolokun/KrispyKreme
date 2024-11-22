@@ -7,7 +7,7 @@ export default function RegisterPage() {
         name: "",
         email: "",
         password: "",
-        accountType: "customer", // Default account type
+        accountType: "customer", 
     });
 
     const [responseMessage, setResponseMessage] = useState("");

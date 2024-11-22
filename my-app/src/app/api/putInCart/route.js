@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import { connectToDatabase } from "@/lib/mongoDB";
 
 const productPrices = {
