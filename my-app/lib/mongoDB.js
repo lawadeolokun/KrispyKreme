@@ -4,7 +4,6 @@ const uri = 'mongodb+srv://b00153847:lawadeolokun@krispykreme.g9lb6.mongodb.net/
 let client;
 let clientPromise;
 
-// Ensure the client is a singleton to avoid multiple connections
 if (!global._mongoClientPromise) {
     client = new MongoClient(uri);
     global._mongoClientPromise = client.connect();
