@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Weather from "./Weather";
+import Weather from "./weather";
 import { Container, Grid, Card, CardContent, Typography, CardMedia, Button } from "@mui/material";
 import Image from "next/image";
 
