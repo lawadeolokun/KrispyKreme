@@ -1,17 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from "@mui/material";
+import { Container, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from "@mui/material";
 
 export default function ViewCartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -36,7 +26,6 @@ export default function ViewCartPage() {
     }
   }
 
-  // Fetch cart items on component mount
   useEffect(() => {
     fetchCartItems();
   }, []);

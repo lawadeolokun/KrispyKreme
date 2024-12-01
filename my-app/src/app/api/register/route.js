@@ -8,7 +8,6 @@ export async function POST(req) {
 
         const { name, email, password, accountType } = await req.json();
 
-        // Validate input
         if (!name || !email || !password || !accountType) {
             console.log("Missing fields" , { name, email, password, accountType });
             return new Response("All fields are required");
@@ -33,7 +32,7 @@ export async function POST(req) {
         const result = await usersCollection.insertOne({
             name,
             email,
-            password, // Store plain password for simplicity; consider hashing in production.
+            password,
             accountType,
             createdAt: new Date(),
         });

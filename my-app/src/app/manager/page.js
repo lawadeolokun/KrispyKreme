@@ -7,7 +7,6 @@ export default function ManagerPage() {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        // Fetch orders from the API
         const fetchOrders = async () => {
             try {
                 const response = await fetch("/api/orders");
@@ -32,7 +31,7 @@ export default function ManagerPage() {
                         <TableRow>
                             <TableCell><strong>Order ID</strong></TableCell>
                             <TableCell><strong>Product Name</strong></TableCell>
-                            <TableCell><strong>Customer Name</strong></TableCell>
+                            <TableCell><strong>Customer Email</strong></TableCell>
                             <TableCell><strong>Time Placed</strong></TableCell>
                         </TableRow>
                     </TableHead>

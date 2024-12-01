@@ -4,7 +4,6 @@ import { connectToDatabase } from "@/lib/mongoDB";
 
 export async function POST(req) {
     try {
-        // Parse the incoming request
         const { email, password } = await req.json();
         console.log("Received email:", email);
         console.log("Received password:", password);
@@ -31,7 +30,7 @@ export async function POST(req) {
             return new Response("Invalid email or password");
         }
 
-        // Compare passwords (assuming plain text for now)
+        // Compare passwords
         if (user.password !== password) {
             console.log("Password does not match for email:", email);
             return new Response("Invalid email or password");

@@ -18,7 +18,7 @@ const Weather = () => {
                 }
 
                 const data = await response.json();
-                console.log("Weather data:", data); // Debugging log
+                console.log("Weather data:", data);
                 setWeather(data);
             } catch (err) {
                 console.error("Weather fetch error:", err);
