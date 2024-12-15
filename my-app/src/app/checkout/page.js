@@ -6,7 +6,7 @@ import { Container, Typography, Button, List, ListItem, ListItemText } from "@mu
 export default function CheckoutPage() {
     const [cartItems, setCartItems] = useState([]);
     const [total, setTotal] = useState(0);
-    const [email, setEmail] = useState("adeolokunlawrence@gmail.com"); // Replace with dynamic user email if needed
+    const [email, setEmail] = useState("adeolokunlawrence@gmail.com"); 
     const [error, setError] = useState("");
 
     // Fetch cart items when the component loads

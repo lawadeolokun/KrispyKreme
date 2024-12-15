@@ -1,48 +1,35 @@
 require("dotenv").config();
-
 import { connectToDatabase } from "@/lib/mongoDB";
+import bcrypt from "bcrypt";
+import escapeHtml from "escape-html";
 
 export async function POST(req) {
     try {
         const { email, password } = await req.json();
-        console.log("Received email:", email);
-        console.log("Received password:", password);
 
         if (!email || !password) {
-            console.log("Missing email or password");
-            return new Response("Email and password are required");
+            return new Response("Email and password are required", { status: 400 });
         }
 
-        // Connect to the database
         const db = await connectToDatabase();
-        console.log("Connected to database:", db.databaseName);
+        const usersCollection = db.collection("users");
 
-        // Check if the `users` collection exists
-        const users = await db.collection("users").find().toArray();
-        console.log("Users in the collection:", users);
-
-        // Check if the user exists
-        const user = await db.collection("users").findOne({ email });
-        console.log("Found user:", user);
-
+        const user = await usersCollection.findOne({ email });
         if (!user) {
-            console.log("User not found for email:", email);
-            return new Response("Invalid email or password");
+            return new Response("Invalid email or password", { status: 401 });
         }
 
-        // Compare passwords
-        if (user.password !== password) {
-            console.log("Password does not match for email:", email);
-            return new Response("Invalid email or password");
+        // Validate password
+        const isPasswordValid = bcrypt.compareSync(password, user.password);
+        if (!isPasswordValid) {
+            return new Response("Invalid email or password", { status: 401 });
         }
 
-        // Success
-        console.log("Login successful for user:", email);
         return new Response(JSON.stringify({ accountType: user.accountType }), {
             headers: { "Content-Type": "application/json" },
         });
     } catch (error) {
         console.error("Login error:", error);
-        return new Response("Server error");
+        return new Response("Server error", { status: 500 });
     }
 }

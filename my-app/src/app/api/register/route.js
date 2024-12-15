@@ -1,47 +1,47 @@
 require("dotenv").config();
-
 import { connectToDatabase } from "@/lib/mongoDB";
+import bcrypt from "bcrypt";
+import escapeHtml from "escape-html";
 
 export async function POST(req) {
     try {
-        console.log("Starting registration process...");
-
         const { name, email, password, accountType } = await req.json();
 
+        // Validate inputs
         if (!name || !email || !password || !accountType) {
-            console.log("Missing fields" , { name, email, password, accountType });
-            return new Response("All fields are required");
+            return new Response("All fields are required", { status: 400 });
+        }
+        if (name.trim().length < 3 || password.length < 6) {
+            return new Response("Invalid name or password length", { status: 400 });
         }
 
-        console.log("Connecting to database...");
         const db = await connectToDatabase();
-        console.log("Database connected");
-
         const usersCollection = db.collection("users");
 
-        console.log("Checking if user exists...");
+        // Check if user already exists
         const existingUser = await usersCollection.findOne({ email });
-        console.log("Existing user check complete:", existingUser);
-
         if (existingUser) {
-            console.log("User already exists");
-            return new Response("User already exists");
+            return new Response("User already exists", { status: 400 });
         }
 
-        console.log("Inserting new user...");
-        const result = await usersCollection.insertOne({
-            name,
-            email,
-            password,
+        // Sanitize and hash password
+        const sanitizedData = {
+            name: escapeHtml(name),
+            email: escapeHtml(email),
+        };
+        const hashedPassword = bcrypt.hashSync(password, 10);
+
+        // Insert new user
+        await usersCollection.insertOne({
+            ...sanitizedData,
+            password: hashedPassword,
             accountType,
             createdAt: new Date(),
         });
 
-        console.log("Insert result:", result);
-
         return new Response("User registered successfully");
     } catch (error) {
         console.error("Registration error:", error);
-        return new Response("An error occurred while registering the user");
+        return new Response("Server error", { status: 500 });
     }
 }
